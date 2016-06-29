@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+    <module name="TreeWalker">
+        <module name="com.github.sevntu.checkstyle.checks.logging.LoggerVariableNameCheck" />
+    </module>
+
+    <module name="TreeWalker">
+      <module name="com.github.sevntu.checkstyle.checks.logging.LoggerVariableModifiersCheck" />
+    </module>
+
+     <module name="TreeWalker">
+      <module name="com.github.sevntu.checkstyle.checks.logging.LoggerMustBeSlf4jCheck" />
+    </module>
+
+    <module name="TreeWalker">
+      <module name="com.github.sevntu.checkstyle.checks.logging.LoggerFactoryClassParameterCheck" />
+    </module>
+
+   <module name="TreeWalker">
+      <module name="com.github.sevntu.checkstyle.checks.logging.LogMessageConcatenationCheck" />
+    </module>
+
+    <module name="TreeWalker">
+      <module name="com.github.sevntu.checkstyle.checks.logging.LogMessagePlaceholderCountCheck" />
+    </module>
+
+    <module name="TreeWalker">
+        <module name="com.github.sevntu.checkstyle.checks.logging.LoggerDeclarationsCountCheck"/>
+    </module>
+
+	<module name="TreeWalker">
+        <module name="com.github.sevntu.checkstyle.checks.logging.LogMessageExtractorCheck"/>
+    </module>
+</module>
