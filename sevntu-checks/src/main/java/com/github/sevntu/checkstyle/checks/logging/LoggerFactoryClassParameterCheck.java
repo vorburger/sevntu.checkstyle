@@ -8,6 +8,7 @@
 
 package com.github.sevntu.checkstyle.checks.logging;
 
+import com.google.common.base.Optional;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
@@ -29,35 +30,34 @@ public class LoggerFactoryClassParameterCheck extends AbstractCheck {
         final String methodName = CheckLoggingUtil.getMethodName(ast);
         if (methodName.equals(METHOD_NAME)) {
             final String className = CheckLoggingUtil.getClassName(ast);
-            final DetailAST findFirstToken = ast.findFirstToken(TokenTypes.ELIST);
-            if (findFirstToken == null) {
-                logError(ast, className);
-                return;
+            final Optional<String> optLoggerArgument = getFirstArgument(ast);
+            if (optLoggerArgument.isPresent()) {
+                if (!optLoggerArgument.get().equals(className)) {
+                    log(ast.getLineNo(), LOG_MESSAGE);
+                }
             }
-            DetailAST childToken = findFirstToken.getFirstChild();
-            if (childToken == null) {
-                logError(ast, className);
-                return;
-            }
-            childToken = childToken.getFirstChild();
-            if (childToken == null) {
-                logError(ast, className);
-                return;
-            }
-            childToken = childToken.getFirstChild();
-            if (childToken == null) {
-                logError(ast, className);
-                return;
-            }
-            final String token = childToken.getText();
-            if (!token.equals(className)) {
-                log(ast.getLineNo(), LOG_MESSAGE);
+            else {
+                log(ast.getLineNo(), String.format(
+                        "Invalid parameter in \"getLogger\" method call in class: %s", className));
             }
         }
     }
 
-    private void logError(DetailAST ast, String className) {
-        log(ast.getLineNo(), String
-                .format("Invalid parameter in \"getLogger\" method call in class: %s", className));
+    protected Optional<String> getFirstArgument(DetailAST ast) {
+        final DetailAST findFirstToken = ast.findFirstToken(TokenTypes.ELIST);
+        if (findFirstToken != null) {
+            DetailAST childToken = findFirstToken.getFirstChild();
+            if (childToken != null) {
+                childToken = childToken.getFirstChild();
+                if (childToken != null) {
+                    childToken = childToken.getFirstChild();
+                    if (childToken != null) {
+                        return Optional.of(childToken.getText());
+                    }
+                }
+            }
+        }
+        return Optional.absent();
     }
+
 }
